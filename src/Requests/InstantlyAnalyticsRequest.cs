@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Soenneker.Instantly.Analytics.Requests;
 
-public class InstantlyAnalyticsRequest
+internal class InstantlyAnalyticsRequest
 {
     [Required]
     [JsonPropertyName("api_key")]

@@ -64,8 +64,23 @@ public class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
         if (endAt != null)
             request.EndDate = endAt.Value.ToString("MM-dd-yyyy");
 
-        string uri = "https://api.instantly.ai/api/v1/analytics/campaign/count" + request.ToQueryString();
+        string uri = "analytics/campaign/count" + request.ToQueryString();
 
         return await client.SendToType<List<InstantlyAnalyticsCampaignResponseItem>>(uri, _logger, cancellationToken: cancellationToken).NoSync();
+    }
+
+    public async ValueTask<InstantlyAnalyticsCampaignSummaryResponse?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default)
+    {
+        HttpClient client = await _instantlyClient.Get(cancellationToken).NoSync();
+
+        var request = new InstantlyAnalyticsRequest
+        {
+            ApiKey = _apiKey,
+            CampaignId = campaignId
+        };
+
+        string uri = "analytics/campaign/summary" + request.ToQueryString();
+
+        return await client.SendToType<InstantlyAnalyticsCampaignSummaryResponse>(uri, _logger, cancellationToken: cancellationToken).NoSync();
     }
 }
