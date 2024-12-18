@@ -1,7 +1,7 @@
 using Soenneker.Instantly.Analytics.Abstract;
 using Soenneker.Tests.FixturedUnit;
 using Xunit;
-using Xunit.Abstractions;
+
 
 namespace Soenneker.Instantly.Analytics.Tests;
 
