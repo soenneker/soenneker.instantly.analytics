@@ -13,18 +13,22 @@ public static class InstantlyAnalyticsUtilRegistrar
     /// <summary>
     /// Adds <see cref="IInstantlyAnalyticsUtil"/> as a singleton service. <para/>
     /// </summary>
-    public static void AddInstantlyAnalyticsUtilAsSingleton(this IServiceCollection services)
+    public static IServiceCollection AddInstantlyAnalyticsUtilAsSingleton(this IServiceCollection services)
     {
-        services.AddInstantlyClientAsSingleton();
-        services.TryAddSingleton<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
+        services.AddInstantlyClientAsSingleton()
+                .TryAddSingleton<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
+
+        return services;
     }
 
     /// <summary>
     /// Adds <see cref="IInstantlyAnalyticsUtil"/> as a scoped service. <para/>
     /// </summary>
-    public static void AddInstantlyAnalyticsUtilAsScoped(this IServiceCollection services)
+    public static IServiceCollection AddInstantlyAnalyticsUtilAsScoped(this IServiceCollection services)
     {
-        services.AddInstantlyClientAsSingleton();
-        services.TryAddScoped<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
+        services.AddInstantlyClientAsSingleton()
+                .TryAddScoped<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
+
+        return services;
     }
 }
