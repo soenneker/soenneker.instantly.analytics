@@ -1,4 +1,4 @@
-# Contributing to Soenneker.Instantly.Analytics
+﻿# Contributing to Soenneker.Instantly.Analytics
 
 We're excited that you're interested in contributing!
 
