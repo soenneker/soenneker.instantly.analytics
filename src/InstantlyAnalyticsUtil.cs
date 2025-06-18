@@ -1,86 +1,70 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Soenneker.Extensions.Configuration;
 using Soenneker.Instantly.Analytics.Abstract;
-using Soenneker.Instantly.Client.Abstract;
+using Soenneker.Instantly.ClientUtil.Abstract;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Soenneker.Extensions.HttpClient;
-using Soenneker.Extensions.Object;
-using Soenneker.Instantly.Analytics.Requests;
 using System;
-using Soenneker.Instantly.Analytics.Responses;
 using System.Linq;
 using Soenneker.Extensions.ValueTask;
 using System.Threading;
 using Soenneker.Extensions.String;
+using Soenneker.Instantly.OpenApiClient;
+using Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Overview;
 
 namespace Soenneker.Instantly.Analytics;
 
 /// <inheritdoc cref="IInstantlyAnalyticsUtil"/>
-public class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
+public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
 {
-    private readonly IInstantlyClient _instantlyClient;
+    private readonly IInstantlyOpenApiClientUtil _instantlyOpenApiClientUtil;
     private readonly ILogger<InstantlyAnalyticsUtil> _logger;
 
-    private readonly string _apiKey;
     private readonly bool _log;
 
-    public InstantlyAnalyticsUtil(IInstantlyClient instantlyClient, ILogger<InstantlyAnalyticsUtil> logger, IConfiguration config)
+    public InstantlyAnalyticsUtil(IInstantlyOpenApiClientUtil instantlyOpenApiClientUtil, ILogger<InstantlyAnalyticsUtil> logger, IConfiguration config)
     {
-        _instantlyClient = instantlyClient;
+        _instantlyOpenApiClientUtil = instantlyOpenApiClientUtil;
         _logger = logger;
-
-        _apiKey = config.GetValueStrict<string>("Instantly:ApiKey");
         _log = config.GetValue<bool>("Instantly:LogEnabled");
     }
 
-    public async ValueTask<InstantlyAnalyticsCampaignResponseItem?> GetCampaignCount(string campaignId, DateTime startAt, DateTime? endAt = null, CancellationToken cancellationToken = default)
+    public async ValueTask<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics?> GetCampaignCount(string campaignId, DateTime startAt,
+        DateTime? endAt = null, CancellationToken cancellationToken = default)
     {
-        List<InstantlyAnalyticsCampaignResponseItem>? response = await FetchCampaignCounts(campaignId, startAt, endAt, cancellationToken).NoSync();
+        List<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics>? response =
+            await FetchCampaignCounts(campaignId, startAt, endAt, cancellationToken).NoSync();
         return response?.FirstOrDefault();
     }
 
-    public ValueTask<List<InstantlyAnalyticsCampaignResponseItem>?> GetCampaignsCounts(DateTime startAt, DateTime? endAt = null, CancellationToken cancellationToken = default)
+    public ValueTask<List<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics>?> GetCampaignsCounts(DateTime startAt, DateTime? endAt = null,
+        CancellationToken cancellationToken = default)
     {
         return FetchCampaignCounts(null, startAt, endAt, cancellationToken);
     }
 
-    private async ValueTask<List<InstantlyAnalyticsCampaignResponseItem>?> FetchCampaignCounts(string? campaignId, DateTime startAt, DateTime? endAt = null,
-        CancellationToken cancellationToken = default)
+    private async ValueTask<List<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics>?> FetchCampaignCounts(string? campaignId,
+        DateTime startAt, DateTime? endAt = null, CancellationToken cancellationToken = default)
     {
-        HttpClient client = await _instantlyClient.Get(cancellationToken).NoSync();
+        InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken).NoSync();
 
-        var request = new InstantlyAnalyticsRequest
-        {
-            ApiKey = _apiKey,
-            StartDate = startAt.ToString("MM-dd-yyyy")
-        };
-
-        if (!campaignId.IsNullOrEmpty())
-            request.CampaignId = campaignId;
-
-        if (endAt != null)
-            request.EndDate = endAt.Value.ToString("MM-dd-yyyy");
-
-        string uri = "analytics/campaign/count" + request.ToQueryString();
-
-        return await client.SendToType<List<InstantlyAnalyticsCampaignResponseItem>>(uri, _logger, cancellationToken: cancellationToken).NoSync();
+        return await new ValueTask<List<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics>?>(client.Api.V2.Campaigns.Analytics.GetAsync(
+            config =>
+            {
+                config.QueryParameters.StartDate = startAt.ToString("yyyy-MM-dd");
+                if (endAt != null)
+                    config.QueryParameters.EndDate = endAt.Value.ToString("yyyy-MM-dd");
+                if (!campaignId.IsNullOrEmpty())
+                    config.QueryParameters.Id = Guid.Parse(campaignId);
+            }, cancellationToken)).NoSync();
     }
 
-    public async ValueTask<InstantlyAnalyticsCampaignSummaryResponse?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default)
+    public async ValueTask<OverviewGetResponse?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default)
     {
-        HttpClient client = await _instantlyClient.Get(cancellationToken).NoSync();
+        InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken).NoSync();
 
-        var request = new InstantlyAnalyticsRequest
-        {
-            ApiKey = _apiKey,
-            CampaignId = campaignId
-        };
-
-        string uri = "analytics/campaign/summary" + request.ToQueryString();
-
-        return await client.SendToType<InstantlyAnalyticsCampaignSummaryResponse>(uri, _logger, cancellationToken: cancellationToken).NoSync();
+        return await new ValueTask<OverviewGetResponse?>(
+            client.Api.V2.Campaigns.Analytics.Overview.GetAsOverviewGetResponseAsync(config => { config.QueryParameters.Id = Guid.Parse(campaignId); },
+                cancellationToken)).NoSync();
     }
 }

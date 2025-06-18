@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Soenneker.Instantly.Analytics.Abstract;
-using Soenneker.Instantly.Client.Registrars;
+using Soenneker.Instantly.ClientUtil.Registrars;
 
 namespace Soenneker.Instantly.Analytics.Registrars;
 
@@ -15,7 +15,7 @@ public static class InstantlyAnalyticsUtilRegistrar
     /// </summary>
     public static IServiceCollection AddInstantlyAnalyticsUtilAsSingleton(this IServiceCollection services)
     {
-        services.AddInstantlyClientAsSingleton()
+        services.AddInstantlyOpenApiClientUtilAsSingleton()
                 .TryAddSingleton<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
 
         return services;
@@ -26,7 +26,7 @@ public static class InstantlyAnalyticsUtilRegistrar
     /// </summary>
     public static IServiceCollection AddInstantlyAnalyticsUtilAsScoped(this IServiceCollection services)
     {
-        services.AddInstantlyClientAsSingleton()
+        services.AddInstantlyOpenApiClientUtilAsScoped()
                 .TryAddScoped<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
 
         return services;
