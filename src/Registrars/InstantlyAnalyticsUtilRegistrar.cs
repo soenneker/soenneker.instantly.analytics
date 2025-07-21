@@ -26,7 +26,7 @@ public static class InstantlyAnalyticsUtilRegistrar
     /// </summary>
     public static IServiceCollection AddInstantlyAnalyticsUtilAsScoped(this IServiceCollection services)
     {
-        services.AddInstantlyOpenApiClientUtilAsScoped()
+        services.AddInstantlyOpenApiClientUtilAsSingleton()
                 .TryAddScoped<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
 
         return services;
