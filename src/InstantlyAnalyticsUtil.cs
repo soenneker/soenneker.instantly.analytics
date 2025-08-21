@@ -34,6 +34,7 @@ public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
     {
         List<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics>? response =
             await FetchCampaignCounts(campaignId, startAt, endAt, cancellationToken).NoSync();
+
         return response?.FirstOrDefault();
     }
 
@@ -64,7 +65,6 @@ public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
         InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken).NoSync();
 
         return await new ValueTask<OverviewGetResponse?>(
-            client.Api.V2.Campaigns.Analytics.Overview.GetAsOverviewGetResponseAsync(config => { config.QueryParameters.Id = Guid.Parse(campaignId); },
-                cancellationToken)).NoSync();
+            client.Api.V2.Campaigns.Analytics.Overview.GetAsync(config => { config.QueryParameters.Id = Guid.Parse(campaignId); }, cancellationToken)).NoSync();
     }
 }

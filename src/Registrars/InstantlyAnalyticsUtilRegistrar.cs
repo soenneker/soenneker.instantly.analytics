@@ -15,8 +15,7 @@ public static class InstantlyAnalyticsUtilRegistrar
     /// </summary>
     public static IServiceCollection AddInstantlyAnalyticsUtilAsSingleton(this IServiceCollection services)
     {
-        services.AddInstantlyOpenApiClientUtilAsSingleton()
-                .TryAddSingleton<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
+        services.AddInstantlyOpenApiClientUtilAsSingleton().TryAddSingleton<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
 
         return services;
     }
@@ -26,8 +25,7 @@ public static class InstantlyAnalyticsUtilRegistrar
     /// </summary>
     public static IServiceCollection AddInstantlyAnalyticsUtilAsScoped(this IServiceCollection services)
     {
-        services.AddInstantlyOpenApiClientUtilAsSingleton()
-                .TryAddScoped<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
+        services.AddInstantlyOpenApiClientUtilAsSingleton().TryAddScoped<IInstantlyAnalyticsUtil, InstantlyAnalyticsUtil>();
 
         return services;
     }
