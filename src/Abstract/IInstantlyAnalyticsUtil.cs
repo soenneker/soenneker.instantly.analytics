@@ -24,7 +24,7 @@ public interface IInstantlyAnalyticsUtil
     /// <see cref="Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics"/> if the campaign exists, or <c>null</c> if no data is found.
     /// </returns>
     [Pure]
-    ValueTask<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics?> GetCampaignCount(string campaignId, DateTime startAt, DateTime? endAt = null, CancellationToken cancellationToken = default);
+    ValueTask<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics?> GetCampaignCount(string campaignId, DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves analytics data for all campaigns within a specified date range.
@@ -37,7 +37,7 @@ public interface IInstantlyAnalyticsUtil
     /// <see cref="Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics"/> instances, or <c>null</c> if no data is found.
     /// </returns>
     [Pure]
-    ValueTask<List<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics>?> GetCampaignsCounts(DateTime startAt, DateTime? endAt = null, CancellationToken cancellationToken = default);
+    ValueTask<List<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics>?> GetCampaignsCounts(DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves a summary of analytics data for a specific campaign.
