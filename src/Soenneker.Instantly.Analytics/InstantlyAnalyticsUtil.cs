@@ -11,6 +11,7 @@ using System.Threading;
 using Soenneker.Extensions.String;
 using Soenneker.Instantly.OpenApiClient;
 using Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Overview;
+using Soenneker.Instantly.OpenApiClient.Models;
 
 namespace Soenneker.Instantly.Analytics;
 
@@ -62,12 +63,12 @@ public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
             }, cancellationToken)).NoSync();
     }
 
-    public async ValueTask<OverviewGetResponse?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default)
+    public async ValueTask<GetCampaignAnalyticsOverview200?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default)
     {
         InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken)
                                                                          .NoSync();
 
-        return await new ValueTask<OverviewGetResponse?>(client.Api.V2.Campaigns.Analytics.Overview.GetAsync(config =>
+        return await new ValueTask<GetCampaignAnalyticsOverview200?>(client.Api.V2.Campaigns.Analytics.Overview.GetAsync(config =>
         {
             config.QueryParameters.Id = Guid.Parse(campaignId);
         }, cancellationToken)).NoSync();
