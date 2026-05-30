@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using System.Diagnostics.Contracts;
-using Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Overview;
+using Soenneker.Instantly.OpenApiClient.Models;
 
 namespace Soenneker.Instantly.Analytics.Abstract;
 
@@ -46,8 +46,8 @@ public interface IInstantlyAnalyticsUtil
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
     /// A <see cref="ValueTask"/> representing the asynchronous operation, with the result being an instance of 
-    /// <see cref="OverviewResponse"/>, or <c>null</c> if no summary is found.
+    /// <see cref="GetCampaignAnalyticsOverview200"/>, or <c>null</c> if no summary is found.
     /// </returns>
     [Pure]
-    ValueTask<OverviewGetResponse?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default);
+    ValueTask<GetCampaignAnalyticsOverview200?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default);
 }
