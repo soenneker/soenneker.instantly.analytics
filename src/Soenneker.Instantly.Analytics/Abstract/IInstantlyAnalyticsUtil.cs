@@ -21,10 +21,10 @@ public interface IInstantlyAnalyticsUtil
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
     /// A <see cref="ValueTask"/> representing the asynchronous operation, with the result being an instance of 
-    /// <see cref="Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics"/> if the campaign exists, or <c>null</c> if no data is found.
+    /// <see cref="GetCampaignAnalytics200ResponseResponseJsonItem"/> if the campaign exists, or <c>null</c> if no data is found.
     /// </returns>
     [Pure]
-    ValueTask<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics?> GetCampaignCount(string campaignId, DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default);
+    ValueTask<GetCampaignAnalytics200ResponseResponseJsonItem?> GetCampaignCount(string campaignId, DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves analytics data for all campaigns within a specified date range.
@@ -34,10 +34,10 @@ public interface IInstantlyAnalyticsUtil
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
     /// A <see cref="ValueTask"/> representing the asynchronous operation, with the result being a list of 
-    /// <see cref="Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics"/> instances, or <c>null</c> if no data is found.
+    /// <see cref="GetCampaignAnalytics200ResponseResponseJsonItem"/> instances, or <c>null</c> if no data is found.
     /// </returns>
     [Pure]
-    ValueTask<List<Soenneker.Instantly.OpenApiClient.Api.V2.Campaigns.Analytics.Analytics>?> GetCampaignsCounts(DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default);
+    ValueTask<List<GetCampaignAnalytics200ResponseResponseJsonItem>?> GetCampaignsCounts(DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves a summary of analytics data for a specific campaign.
@@ -46,8 +46,8 @@ public interface IInstantlyAnalyticsUtil
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>
     /// A <see cref="ValueTask"/> representing the asynchronous operation, with the result being an instance of 
-    /// <see cref="GetCampaignAnalyticsOverview200"/>, or <c>null</c> if no summary is found.
+    /// <see cref="GetCampaignAnalyticsOverview200Response"/>, or <c>null</c> if no summary is found.
     /// </returns>
     [Pure]
-    ValueTask<GetCampaignAnalyticsOverview200?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default);
+    ValueTask<GetCampaignAnalyticsOverview200Response?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default);
 }
