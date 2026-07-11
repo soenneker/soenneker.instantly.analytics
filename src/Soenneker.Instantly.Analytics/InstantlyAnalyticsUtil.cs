@@ -23,19 +23,19 @@ public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
 
     private readonly bool _log;
 
-    public InstantlyAnalyticsUtil(IInstantlyOpenApiClientUtil instantlyOpenApiClientUtil, ILogger<InstantlyAnalyticsUtil> logger, IConfiguration config)
+    public InstantlyAnalyticsUtil(IInstantlyOpenApiClientUtil instantlyOpenApiClientUtil,
+        ILogger<InstantlyAnalyticsUtil> logger, IConfiguration config)
     {
         _instantlyOpenApiClientUtil = instantlyOpenApiClientUtil;
         _logger = logger;
         _log = config.GetValue<bool>("Instantly:LogEnabled");
     }
 
-    public async ValueTask<GetCampaignAnalytics200ResponseResponseJsonItem?> GetCampaignCount(string campaignId, DateTimeOffset startAt,
-        DateTimeOffset? endAt = null, CancellationToken cancellationToken = default)
+    public async ValueTask<GetCampaignAnalytics200ResponseResponseJsonItem?> GetCampaignCount(string campaignId,
+        DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default)
     {
         List<GetCampaignAnalytics200ResponseResponseJsonItem>? response =
-            await FetchCampaignCounts(campaignId, startAt, endAt, cancellationToken)
-                .NoSync();
+            await FetchCampaignCounts(campaignId, startAt, endAt, cancellationToken).NoSync();
 
         return response?.FirstOrDefault();
     }
@@ -46,31 +46,32 @@ public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
         return FetchCampaignCounts(null, startAt, endAt, cancellationToken);
     }
 
-    private async ValueTask<List<GetCampaignAnalytics200ResponseResponseJsonItem>?> FetchCampaignCounts(string? campaignId,
-        DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default)
+    private async ValueTask<List<GetCampaignAnalytics200ResponseResponseJsonItem>?> FetchCampaignCounts(
+        string? campaignId, DateTimeOffset startAt, DateTimeOffset? endAt = null,
+        CancellationToken cancellationToken = default)
     {
-        InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken)
-                                                                         .NoSync();
+        InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken).NoSync();
 
-        return await new ValueTask<List<GetCampaignAnalytics200ResponseResponseJsonItem>?>(client.Api.V2.Campaigns.Analytics.GetAsync(
-            config =>
+        return await new ValueTask<List<GetCampaignAnalytics200ResponseResponseJsonItem>?>(
+            client.Api.V2.Campaigns.Analytics.GetAsync(config =>
             {
                 config.QueryParameters.StartDate = startAt.ToString("yyyy-MM-dd");
                 if (endAt != null)
                     config.QueryParameters.EndDate = endAt.Value.ToString("yyyy-MM-dd");
                 if (!campaignId.IsNullOrEmpty())
-                    config.QueryParameters.Id = Guid.Parse(campaignId);
+                    config.QueryParameters.Id = campaignId;
             }, cancellationToken)).NoSync();
     }
 
-    public async ValueTask<GetCampaignAnalyticsOverview200Response?> GetCampaignSummary(string campaignId, CancellationToken cancellationToken = default)
+    public async ValueTask<GetCampaignAnalyticsOverview200Response?> GetCampaignSummary(string campaignId,
+        CancellationToken cancellationToken = default)
     {
-        InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken)
-                                                                         .NoSync();
+        InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken).NoSync();
 
-        return await new ValueTask<GetCampaignAnalyticsOverview200Response?>(client.Api.V2.Campaigns.Analytics.Overview.GetAsync(config =>
-        {
-            config.QueryParameters.Id = Guid.Parse(campaignId);
-        }, cancellationToken)).NoSync();
+        return await new ValueTask<GetCampaignAnalyticsOverview200Response?>(
+            client.Api.V2.Campaigns.Analytics.Overview.GetAsync(config =>
+            {
+                config.QueryParameters.Id = campaignId;
+            }, cancellationToken)).NoSync();
     }
 }
