@@ -31,28 +31,28 @@ public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
         _log = config.GetValue<bool>("Instantly:LogEnabled");
     }
 
-    public async ValueTask<GetCampaignAnalytics200ResponseResponseJsonItem?> GetCampaignCount(string campaignId,
+    public async ValueTask<GetCampaignAnalytics200ResponseSchemaItem?> GetCampaignCount(string campaignId,
         DateTimeOffset startAt, DateTimeOffset? endAt = null, CancellationToken cancellationToken = default)
     {
-        List<GetCampaignAnalytics200ResponseResponseJsonItem>? response =
+        List<GetCampaignAnalytics200ResponseSchemaItem>? response =
             await FetchCampaignCounts(campaignId, startAt, endAt, cancellationToken).NoSync();
 
         return response?.FirstOrDefault();
     }
 
-    public ValueTask<List<GetCampaignAnalytics200ResponseResponseJsonItem>?> GetCampaignsCounts(DateTimeOffset startAt,
+    public ValueTask<List<GetCampaignAnalytics200ResponseSchemaItem>?> GetCampaignsCounts(DateTimeOffset startAt,
         DateTimeOffset? endAt = null, CancellationToken cancellationToken = default)
     {
         return FetchCampaignCounts(null, startAt, endAt, cancellationToken);
     }
 
-    private async ValueTask<List<GetCampaignAnalytics200ResponseResponseJsonItem>?> FetchCampaignCounts(
+    private async ValueTask<List<GetCampaignAnalytics200ResponseSchemaItem>?> FetchCampaignCounts(
         string? campaignId, DateTimeOffset startAt, DateTimeOffset? endAt = null,
         CancellationToken cancellationToken = default)
     {
         InstantlyOpenApiClient client = await _instantlyOpenApiClientUtil.Get(cancellationToken).NoSync();
 
-        return await new ValueTask<List<GetCampaignAnalytics200ResponseResponseJsonItem>?>(
+        return await new ValueTask<List<GetCampaignAnalytics200ResponseSchemaItem>?>(
             client.Api.V2.Campaigns.Analytics.GetAsync(config =>
             {
                 config.QueryParameters.StartDate = startAt.ToString("yyyy-MM-dd");
