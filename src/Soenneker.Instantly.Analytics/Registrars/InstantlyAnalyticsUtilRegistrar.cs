@@ -6,7 +6,7 @@ using Soenneker.Instantly.ClientUtil.Registrars;
 namespace Soenneker.Instantly.Analytics.Registrars;
 
 /// <summary>
-/// A .NET typesafe implementation of Instantly.ai's Analytics API
+/// Registers Instantly campaign analytics operations.
 /// </summary>
 public static class InstantlyAnalyticsUtilRegistrar
 {

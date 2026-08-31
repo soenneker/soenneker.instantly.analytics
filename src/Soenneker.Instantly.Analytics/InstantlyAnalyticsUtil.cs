@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Soenneker.Instantly.Analytics.Abstract;
 using Soenneker.Instantly.ClientUtil.Abstract;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
@@ -15,7 +16,6 @@ using Soenneker.Instantly.OpenApiClient.Models;
 
 namespace Soenneker.Instantly.Analytics;
 
-/// <inheritdoc cref="IInstantlyAnalyticsUtil"/>
 public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
 {
     private readonly IInstantlyOpenApiClientUtil _instantlyOpenApiClientUtil;
@@ -55,9 +55,9 @@ public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
         return await new ValueTask<List<GetCampaignAnalytics200ResponseSchemaItem>?>(
             client.Api.V2.Campaigns.Analytics.GetAsync(config =>
             {
-                config.QueryParameters.StartDate = startAt.ToString("yyyy-MM-dd");
+                config.QueryParameters.StartDate = startAt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 if (endAt != null)
-                    config.QueryParameters.EndDate = endAt.Value.ToString("yyyy-MM-dd");
+                    config.QueryParameters.EndDate = endAt.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 if (!campaignId.IsNullOrEmpty())
                     config.QueryParameters.Id = campaignId;
             }, cancellationToken)).NoSync();

@@ -8,7 +8,7 @@ using Soenneker.Instantly.OpenApiClient.Models;
 namespace Soenneker.Instantly.Analytics.Abstract;
 
 /// <summary>
-/// A .NET typesafe implementation of Instantly.ai's Analytics API
+/// Retrieves per-campaign and workspace-wide Instantly campaign analytics.
 /// </summary>
 public interface IInstantlyAnalyticsUtil
 {
