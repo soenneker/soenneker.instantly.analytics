@@ -16,6 +16,7 @@ using Soenneker.Instantly.OpenApiClient.Models;
 
 namespace Soenneker.Instantly.Analytics;
 
+/// <inheritdoc cref="IInstantlyAnalyticsUtil" />
 public sealed class InstantlyAnalyticsUtil : IInstantlyAnalyticsUtil
 {
     private readonly IInstantlyOpenApiClientUtil _instantlyOpenApiClientUtil;
